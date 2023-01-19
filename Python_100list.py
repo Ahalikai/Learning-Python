@@ -2,12 +2,124 @@
 #Python基础100题
 # https://zhuanlan.zhihu.com/p/381160186
 
+#100
 
+#99
+import itertools
+print(list(itertools.permutations([1,2,3])))
 
+#98
+s = input()
+print(s[::2])
 
+#97
+s = input()
+print(s[:: -1])
 
+#96
+s = input()
+d = {}
+for i in s:
+    d[i] = d.get(i, 0) + 1
+print("\n".join(['%s, %s' % (k, v) for k, v in d.items()]))
 
+#95
+class Person(object):
+    def gen(self):
+        return "unknown"
+class Male(Person):
+    def gen(self):
+        return "Male"
+class Female(Person):
+    def gen(self):
+        return "Female"
+aMale= Male()
+aFemale = Female()
+print(aMale.gen())
+print(aFemale.gen())
 
+input()
+
+#94
+def removeDuplicate(l):
+    newl = []
+    s = set()
+    for i in l:
+        if i not in s:
+            s.add(i)
+            newl.append(i)
+    return newl
+li=[12,24,35,24,88,120,155,88,120,155]
+print(removeDuplicate(li))
+
+#93
+set1=set([1,3,6,78,35,55])
+set2=set([12,24,35,24,88,120,155])
+set1 &= set2
+li = list(set1)
+print(li)
+
+#91 92
+li = [12,24,35,70,88,120,155]
+li = [x for x in li if x != 24]
+print(li)
+li = [x for (i, x) in enumerate(li) if i not in (0, 4, 5)]
+print(li)
+
+#90
+a = [[ [0 for col in range(8)] for col in range(5)] for row in range(3)]
+print(a)
+import numpy as np
+a = np.zeros((3, 5, 8), dtype='uint8')
+print(a)
+
+#89
+li = [12,24,35,70,88,120,155]
+li = [x for (i, x) in enumerate(li) if i % 2 != 0]
+print(li)
+
+#87 88
+li = [5,6,77,45,22,12,24]
+li = [x for x in li if x % 2 != 0]
+print(li)
+
+#86
+
+#84 85
+from random import shuffle
+li = [3,6,7,8]
+shuffle(li)
+print(li)
+
+#83
+from timeit import Timer
+t = Timer("for i in range(100): 1+1")
+print(t.timeit())
+
+#82
+import zlib
+s = b'hello world!hello world!hello world!hello world!'
+t = zlib.compress(s)
+print(t)
+print(zlib.decompress(t))
+
+#73-81
+import random
+print(random.randint(1, 100) )
+print(random.random() * 100)
+print(random.random() * 100 -5)
+print(random.choice([i for i in range(11) if i % 2 == 0]) )
+print(random.choice( [i for i in range(201) if i % 5 == 0 and i % 7 == 0]))
+print(random.sample(range(100), 5))
+print(random.sample([i for i in range(100, 201) if i % 2 == 0], 5))
+print(random.sample([i for i in range(1, 1001) if i % 5 == 0 and i % 7 == 0], 5))
+print(random.randrange(7, 16))
+
+#72 B_search
+
+#71
+e = input()
+print(eval(e))
 
 #68 69 70
 def EvenNum(n):
