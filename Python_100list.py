@@ -9,13 +9,26 @@
 
 
 
+#aha
 
-
-
+#51
+class Ame(object):
+    pass
+class NewY(Ame):
+    pass
+anAme = Ame()
+aNewY = NewY()
+print(anAme)
+print(aNewY)
 
 #50
 class American(object):
-    @staticmethod
+    @staticmethod #不传参，可将其当作一般函数使用，有利于减少不必要的内存和性能消耗。
+    def printNation():
+        print("USA")
+anAme = American()
+anAme.printNation()
+American.printNation()
 
 input()
 #48 49
