@@ -9,8 +9,6 @@
 
 
 
-
-
 #68 69 70
 def EvenNum(n):
     i = 0
