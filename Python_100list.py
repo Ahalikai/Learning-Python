@@ -9,7 +9,132 @@
 
 
 
-#aha
+
+
+#68 69 70
+def EvenNum(n):
+    i = 0
+    while i < n:
+        if i % 2 == 0:
+            yield i
+        i += 1
+n = int(input())
+result = []
+for i in EvenNum(n):
+    result.append(str(i))
+print(", ".join(result))
+
+for i in result:
+    assert int(i) % 2 == 0
+print(result)
+
+#67
+def Fi(n):
+    if n == 0 or n == 1:
+        return n
+    else:
+        return Fi(n - 1) + Fi(n - 2)
+n = int(input())
+result = [str(Fi(x)) for x in range(n + 1)]
+print(", ".join(result))
+print(result)
+
+#65 66 easy
+
+#64
+n = int(input())
+result = 0.0
+for i in range(n):
+    result += (i + 1) / (i + 2)
+print(result)
+
+#63
+# -*- coding:utf-8 -*-
+#--------------------------#
+
+#62
+s = '和鲸社区'
+enc = s.encode("utf-8")
+dec = s.encode("utf-8")
+print(enc)
+print(dec)
+
+#61
+unicodeString = u"hello world!"
+print(unicodeString)
+
+#60
+import re
+s = input()
+print(re.findall("\d+", s))
+
+#58 59
+import re
+e = input()
+pat2 = "(\w+)@((\w+\.)+(com))"
+r2 = re.match(pat2, e)
+print(r2.group(1))
+print(r2.group(2))
+
+#57
+class MyError(Exception):
+    """
+    Attributes:
+        msg -- an error
+    """
+    def __init__(self, msg):
+        self.msg = msg
+error = MyError("a test 57")
+print(error)
+
+#56
+def throws():
+    return 5/0
+try:
+    throws()
+except ZeroDivisionError:
+    print("Zero!")
+except Exception:
+    print("a text!")
+finally:
+    print("finish")
+
+#55
+raise RuntimeError('a test')
+
+#54
+class Shape(object):
+    def __init__(self):
+        pass
+    def Area(self):
+        return 0
+class Rec(Shape):
+    def __init__(self, l):
+        Shape.__init__(self)
+        self.l = l
+    def Area(self):
+        return self.l * self.l
+aRec = Rec(3)
+print(aRec.Area())
+
+#53
+class Rec(object):
+    def __init__(self, w, h):
+        self.w = w
+        self.h = h
+    def Area(self):
+        return self.w * self.h
+R = Rec(2, 10)
+print(R.Area())
+
+#52
+class Circle(object):
+    def __init__(self, r):
+        self.r = r
+    def Area(self):
+        return 3.14 * self.r * self.r
+C = Circle(2)
+print(C.Area())
 
 #51
 class Ame(object):
@@ -343,13 +468,4 @@ for i in range(2000, 3200):
 for i in range(len(l) - 1):
     print(l[i], end=', ')
 print(l[len(l) - 1])
-
-
-
-
-
-
-
-
-
 
