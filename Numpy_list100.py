@@ -5,6 +5,69 @@
 import numpy as np
 
 
+#50
+z = np.arange(100)
+v = np.random.uniform(0, 100)
+index = (np.abs(z - v).argmin())
+print(z[index])
+
+#49
+np.set_printoptions(threshold=np.nan)
+Z = np.zeros((16,16))
+print (Z)
+
+#48
+for dtype in [np.int8, np.int32, np.int64]:
+  print(np.iinfo(dtype).min)
+  print(np.iinfo(dtype).max)
+for dtype in [np.float32, np.float64]:
+  print(np.finfo(dtype).min)
+  print(np.finfo(dtype).max)
+  print(np.finfo(dtype).eps)
+
+#47
+x = np.arange(8)
+y = x + 0.5
+c = 1.0 / np.subtract.outer(x, y)
+print(np.linalg.det(c)) #求行列式
+#np.info(np.linalg.det)
+
+#46
+z = np.zeros((5, 5), [('x', float), ('y', float)])
+z['x'], z['y'] = np.meshgrid(np.linspace(0, 1, 5),
+                             np.linspace(0, 1, 5))
+print(z)
+#np.info(np.meshgrid)
+
+#45
+z = np.random.random(10)
+z[z.argmax()] = 0
+print(z)
+
+#44
+z = np.random.random((10, 2))
+x, y = z[:,0], z[0:,1]
+r = np.sqrt(x**2 + y**2)
+t = np.arctan2(y, x)
+print(r)
+print(t)
+
+#43
+z = np.zeros(10)
+z.flags.writeable = False
+z[0] = 1
+
+input()
+#42
+a = np.random.randint(0, 2, 5)
+b = np.random.randint(0, 2, 5)
+
+print(np.allclose(a, b) )
+print(np.array_equal(a, b) )
+
+#41
+np.info(np.add.reduce)
+print(np.add.reduce(np.arange(10)))
 
 #40
 z = np.random.random(10)
