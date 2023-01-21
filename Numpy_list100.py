@@ -6,6 +6,65 @@ import numpy as np
 
 
 
+#40
+z = np.random.random(10)
+z.sort()
+print(z)
+print(sorted.__doc__)
+
+#39
+print(np.linspace(0, 1, 11, endpoint=False)[1:])
+
+#38
+def gen(n):
+    for i in range(n):
+        yield i
+z = np.fromiter(gen(10), dtype=float, count=-1)
+print(z)
+
+#37
+z = np.zeros((5, 5))
+z += np.arange(5)
+print(z)
+
+#36
+z = np.random.uniform(0, 10, 10)
+print(z - z % 1)
+print(np.floor(z))
+print(np.ceil(z) - 1)
+print(z.astype(int))
+print(np.trunc(z))
+
+#35
+a = np.ones(3) * 1
+b = np.ones(3) * 2
+np.add(a, b, out=b)
+np.divide(a, 2, out=a)
+np.negative(a, out=a)
+np.multiply(a, b, out=a)
+
+#34
+print( np.arange('2016-07', '2016-08', dtype='datetime64[D]') )
+
+#33
+y = np.datetime64('today', 'D') - np.timedelta64(1, 'D')
+today = np.datetime64('today', 'D')
+torr = np.datetime64('today', 'D') + np.timedelta64(1, 'D')
+
+print(str(y))
+print(str(today))
+print(str(torr))
+
+#32
+
+#31
+#np.info(np.seterr)
+defa = np.seterr(all="ignore")
+z = np.ones(1) / 0
+np.seterr(**defa)
+print(np.ones(1) / 0)
+input()
+
 #30
 z1 = np.random.randint(0, 10, 10)
 z2 = np.random.randint(0, 10, 10)
