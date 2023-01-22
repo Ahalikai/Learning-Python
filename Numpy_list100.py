@@ -3,8 +3,40 @@
 # https://zhuanlan.zhihu.com/p/101985294
 
 import numpy as np
+import scipy.spatial
+from io import StringIO
 
 
+#55
+z = np.arange(9).reshape((3, 3))
+for i, v in np.ndenumerate(z):
+    print(i, v)
+for i in np.ndindex(z.shape):
+    print(i, z[i])
+
+#54
+s = StringIO("1, 2, 3, 4, 5, 6, , , 7, 8, , 9, 10, 11")
+d = np.genfromtxt(s, dtype='int', delimiter=",")
+
+#53
+z = np.arange(10, dtype=np.int32)
+z = z.astype(np.float32, copy=False)
+print(z)
+input()
+
+#52
+z = np.random.random((10, 2))
+x, y = np.atleast_2d(z[:,0], z[:,1])
+D = np.sqrt( (x - x.T) ** 2 + (y - y.T) ** 2)
+print(D)
+D = scipy.spatial.distance.cdist(z, z)
+print(D)
+
+#51
+print(np.zeros(10, [('position', [('x', float, 1), ('y', float, 1) ]),
+                    ('color', [('r', float, 1), ('g', float, 1), ('b', float, 1)]) ]
+               ) )
+input()
 #50
 z = np.arange(100)
 v = np.random.uniform(0, 100)
