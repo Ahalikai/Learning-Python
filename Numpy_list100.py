@@ -5,7 +5,157 @@
 import numpy as np
 import scipy.spatial
 from io import StringIO
+import matplotlib.pyplot as plt
+import pandas as pd
 
+
+
+#75
+#np.info(np.cumsum)
+def win_move(a, n = 3):
+    r = np.cumsum(a, dtype=float)
+    r[n:] = r[n:] - r[:-n]
+    return r[n - 1:] / n
+z = np.arange(20)
+print(win_move(z, n = 3))
+
+#74
+#np.info(np.repeat)
+#np.info(np.bincount)
+C = np.bincount([1,1,2,3,4,4,6])
+print(np.repeat(np.arange(len(C)), C))
+
+#73
+#np.info(np.roll)
+f = np.random.randint(0, 100, (10, 3))
+F = np.roll(f.repeat(2, axis=1), -1, axis=1)
+F = F.reshape(len(F) * 3, 2)
+F = np.sort(F, axis=1)
+G = F.view(dtype=[('p0', F.dtype), ('p1', F.dtype)])
+print(np.unique(G))
+input()
+#72
+a = np.arange(25).reshape((5, 5))
+a[[0, 1]] = a[[1, 0]]
+print(a)
+
+#71
+a = np.ones((5, 5, 3))
+b = 2 * np.ones((5, 5))
+print(a * b[:,:,None])
+
+#70
+z = np.array([1, 2, 3, 4, 5])
+nz = 3
+z0 = np.zeros(len(z) + (len(z) - 1) * nz )
+z0[::nz + 1] = z
+print(z0)
+
+#69
+A, B = np.random.randint(0, 1, (5, 5)), np.random.randint(0, 1, (5, 5))
+np.diag(np.dot(A, B))
+
+np.sum(A * B.T, axis=1)
+
+np.einsum("ij, ji->i", A, B)
+
+#68
+D = np.random.uniform(0, 1, 100)
+S = np.random.randint(0, 10, 100)
+D_sum = np.bincount(S, weights=D)
+D_count = np.bincount(S)
+print(D_sum / D_count)
+
+print(pd.Series(D).groupby(S).mean())
+
+#67
+A = np.random.randint(0, 10, (3, 4, 3, 4))
+print( A.sum(axis=(-2, -1)) )
+
+print( A.reshape(A.shape[:-2] + (-1,)).sum(axis=-1) )
+
+
+#66
+h, w = 5, 5
+img = np.random.randint(0, 2, (h, w, 3)).astype(np.ubyte)
+F = img[..., 0]*(256**2) + img[..., 1]*256 + img[..., 2]
+print( len(np.unique(F)) )
+
+#65
+X = [1,2,3,4,5,6]
+I = [1,3,9,3,4,1]
+print( np.bincount(I,X) )
+
+#64
+#np.info(np.bincount)
+z = np.ones(10)
+i = np.random.randint(0, len(z), 20)
+z += np.bincount(i, minlength=len(z))
+print(z)
+
+print(np.add.at(z, i , 1))
+
+#63 未掌握
+class Name(np.ndarray):
+    def __new__(cls, array, name = "no name"):
+        obj = np.asarray(array).view(cls)
+        obj.name = name
+        return obj
+
+    def __array_finalize__(self, obj):
+        if obj is None:return
+        self.info = getattr(obj, 'name', "no name")
+
+z = Name(np.arange(10), "range_10")
+print(z.name)
+
+#62
+#np.info(np.nditer)
+#
+it = np.nditer([np.arange(3).reshape((3,1)), np.arange(3).reshape((3,1))
+                , None])
+#print(*it)
+for x, y, z in it:
+    z[...] = x + y #。。。默认
+print(it.operands[2])
+input()
+
+#61
+z = np.random.uniform(0, 1, 10)
+print(z.flat[np.abs(z - 0.5).argmin()])
+
+#60
+print(~np.random.randint(0, 3, (3, 10)).any(axis=0).any())
+
+#58 59
+x = np.random.randint(0, 10, (5, 5))
+print(x)
+print()
+print(x[x[:,3].argsort()])
+input()
+print(x - x.mean(axis=1, keepdims=True))
+
+#57
+np.info(np.put)
+n, p = 10, 3
+z = np.zeros((n, n))
+np.put(z, np.random.choice(range(n**2), p, replace=False), 1)
+print(z)
+
+#56
+x = np.arange(-5, 5, 0.1)
+y = np.arange(-5, 5, 0.1)
+xx, yy = np.meshgrid(x, y, sparse=True)
+z = np.sin(xx**2 + yy**2) / (xx**2 + yy**2)
+h = plt.contourf(x,y,z)
+plt.show()
+
+np.info(np.meshgrid)
+
+x, y = np.meshgrid(np.linspace(-1, 1, 10), np.linspace(-1, 1, 10) )
+D = np.sqrt(x**2 + y**2)
+sigma, mu = 1.0, 1.0
+print(np.exp(-( (D-mu)**2 / ( 2.0 * sigma**2 ) ) ) )
 
 #55
 z = np.arange(9).reshape((3, 3))
@@ -22,7 +172,6 @@ d = np.genfromtxt(s, dtype='int', delimiter=",")
 z = np.arange(10, dtype=np.int32)
 z = z.astype(np.float32, copy=False)
 print(z)
-input()
 
 #52
 z = np.random.random((10, 2))
