@@ -1,3 +1,6 @@
+
+# https://www.bilibili.com/video/BV1eR4y1R7PP/
+# 【唐博士带你学AI】唐宇迪 OpenCV
 import cv2
 import matplotlib as plt
 import numpy as np
