@@ -3,13 +3,177 @@
 # https://zhuanlan.zhihu.com/p/101985294
 
 import numpy as np
+from numpy.lib import stride_tricks
 import scipy.spatial
 from io import StringIO
 import matplotlib.pyplot as plt
 import pandas as pd
 
+#100
+X = np.random.randn(100)
+N = 10000
+idx = np.random.randint(0, X.size, (N, X.size))
+means = X[idx].mean(axis=1)
+print(np.percentile(means, [2.5, 97.5]))
+
+#99
+X = np.asarray([[1.0, 0.0, 3.0, 8.0],
+                [2.0, 0.0, 1.0, 1.0],
+                [1.5, 2.5, 1.0, 0.0]])
+n = 4
+M = np.logical_and.reduce(np.mod(X, 1) == 0, axis=-1)
+M &= (X.sum(axis=-1) == n)
+print(X[M])
+
+#98
+
+input()
+#97
+A = np.random.uniform(0,1,10)
+B = np.random.uniform(0,1,10)
+print( np.einsum('i->', A) )
+print( np.einsum('i, i->i', A, B) )
+print( np.einsum('i, i', A, B) )
+print( np.einsum('i, j->ij', A, B) )
+
+#96
+
+#95
+I = np.array([0, 1, 2, 3, 15, 16, 32, 64, 128], dtype=np.uint8)
+B = ( (I.reshape(-1, 1) & (2**np.arange(8))) != 0).astype(int)
+print(B[:,::-1])
+
+print(np.unpackbits(I[:, np.newaxis], axis=1))
+
+#94
+Z = np.random.randint(0, 5, (10, 3))
+E = np.all(Z[:,1:] == Z[:,:-1], axis=1)
+print(Z[~E]) #1
+
+print(Z[Z.max(axis=1) != Z.min(axis=1), :])#2
+
+#93
+a = np.random.randint(0, 5, (8, 3))
+b = np.random.randint(0, 5, (2, 2))
+c = (a[..., np.newaxis, np.newaxis] == b)
+print( np.where(c.any((3, 1)).all(1))[0] )
+
+#92
+x = np.random.rand()
+#1
+print(np.power(x, 3))
+#2
+print(x**3)
+#3
+np.einsum('i,i,i->i',x,x,x)
+
+#91
+z = np.array([("Hello", 2.5, 3),
+              ("World", 3.6, 2)])
+print(np.core.records.fromarrays(z.T, names='c1, c2, c3', formats='S8, f8, i8').dtype)
+
+#90
+def cartesian(a):
+    a = [np.asarray(a) for a in a]
+    shape = (len(x) for x in a)
+
+    ix = np.indices(shape, dtype=int)
+    ix = ix.reshape(len(a), -1).T
+
+    for n, arr in enumerate(a):
+        ix[:, n] = a[n][ix[:, n]]
+    return ix
+
+print(cartesian(([1, 2, 3], [4, 5], [6, 7])))
+
+#89
+z = np.arange(10000)
+np.random.shuffle(z)
+n = 5
+#Slow
+print(z[np.argsort(z)[-n:]])
+#Quick
+print(z[np.argpartition(-z, n)[:n]])
+
+#88
+
+#87
+z = np.ones((16, 16))
+k = 4
+s = np.add.reduceat(np.add.reduceat(z, np.arange(0, z.shape[0], k), axis=0),
+                    np.arange(0, z.shape[1], k), axis=1)
+print(s)
+
+#86
+p, n = 3, 3
+m = np.ones((p, n, n))
+v = np.ones((p, n, 1))
+print(np.tensordot(m, v, axes=[[0, 2], [0, 1]]))
+
+#85
+class Symetric(np.ndarray):
+    def __setitem__(self, key, value):
+        i, j = key
+        super(Symetric, self).__setitem__((i, j), value)
+        super(Symetric, self).__setitem__((j, i), value)
+    def symetric(z):
+        return np.asarray(z + z.T - np.diag(z.diagonal())).view(Symetric)
+input()
+
+#84
+z = np.random.randint(0, 5, (5, 5))
+n = 3
+i = 1 + (z.shape[0] - 3)
+j = 1 + (z.shape[1] - 3)
+print(stride_tricks.as_strided(z, shape=(i, j, n, n), strides=z.strides * 2 ))
+
+#83
+z = np.random.randint(0, 5, 10)
+print(np.bincount(z).argmax())
+
+#82
+#np.info(np.linalg.svd)
+z = np.arange(9).reshape((3, 3))
+u, s, v = np.linalg.svd(z)
+print(np.sum(s > 1e-10))
+
+#81
+z = np.arange(0, 15, dtype=np.uint32)
+print( stride_tricks.as_strided(z, (11, 4), (4, 4)) )
+
+#80 未掌握
+
+#78 79
+def distance(P0, P1, P):
+    T = P1 - P0
+    L = (T**2).sum(axis=1)
+    U = -((P0[:, 0] - p[..., 0]) * T[:, 0] + (P0[:, 1] - p[..., 1]) * T[:, 1]) / L
+    U = U.reshape(len(U), 1)
+    D = P0 + U * T - P
+    return np.sqrt((D**2).sum(axis=1))
+
+p0 = np.random.uniform(-10, 10, (10, 2))
+p1 = np.random.uniform(-10, 10, (10, 2))
+p = np.random.uniform(-10, 10, (1, 2))
+print( distance(p0, p1, p) )
+
+p = np.random.uniform(-10, 10, (10, 2))
+print(np.array([distance(p0, p1, p_i) for p_i in p]))
+
+input()
+#77
+z = np.random.randint(0, 2, 100)
+print(np.logical_not(z, out=z))
+z = np.random.uniform(-1.0, 1.0, 100)
+print(z)
+print(np.negative(z, out=z))
 
 #76
+def roll(a, n):
+    s = (a.size - n + 1, n)
+    strides = (a.itemsize, a.itemsize)
+    return stride_tricks.as_strided(a, shape=s, strides=strides)
+print( roll(np.arange(10), 3) )
 
 #75
 #np.info(np.cumsum)
@@ -34,7 +198,7 @@ F = F.reshape(len(F) * 3, 2)
 F = np.sort(F, axis=1)
 G = F.view(dtype=[('p0', F.dtype), ('p1', F.dtype)])
 print(np.unique(G))
-input()
+
 #72
 a = np.arange(25).reshape((5, 5))
 a[[0, 1]] = a[[1, 0]]
