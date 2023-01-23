@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
+#76
 
 #75
 #np.info(np.cumsum)
