@@ -12,7 +12,6 @@ import pandas as pd
 
 #75
 #np.info(np.cumsum)
-
 def win_move(a, n = 3):
     r = np.cumsum(a, dtype=float)
     r[n:] = r[n:] - r[:-n]
