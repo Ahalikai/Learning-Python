@@ -21,19 +21,39 @@ def img_color(img, color = 'o'):
     return cur_img
 
 img = cv2.imread("cat.jpg")
+img_1 = cv2.imread('1_1.jpg')
 
+input()
+
+#5 image compute
+img_1 = cv2.resize(img_1, (img.shape[0], img.shape[1]))
+#cv_show('1_1', img_1)
+img_u = cv2.addWeighted(img, 0.6, img_1, 0.4, 0)
+#cv_show('union', img_u)
+img_fxn = cv2.resize(img, (0, 0), fx = 2, fy = 1)
+#cv_show('fxn', img_fxn)
+
+img = img[:5, :5, 0]
+print(img)
+print(img + 10)
 
 #4 filling
 top_size, bottom_size, left_size, right_size = (50, 50, 50, 50)
 
+# REPLICATE： 复制最边缘上的一个点，所有的维度都使用当前的点
+#REPLICATE = cv2.copyMakeBorder(img, top_size, bottom_size, left_size, right_size, cv2.BORDER_REPLICATE)
+REFLECT = cv2.copyMakeBorder(img, top_size, bottom_size, left_size, right_size, cv2.BORDER_REFLECT)
 replicate = cv2.copyMakeBorder(img, top_size, bottom_size, left_size, right_size, borderType = cv2.BORDER_REPLICATE)
+REFLECT_101 = cv2.copyMakeBorder(img, top_size, bottom_size, left_size, right_size, cv2.BORDER_REFLECT_101)
+WRAP = cv2.copyMakeBorder(img, top_size, bottom_size, left_size, right_size, cv2.BORDER_WRAP)
+CONST = cv2.copyMakeBorder(img, top_size, bottom_size, left_size, right_size, cv2.BORDER_CONSTANT, value = 255)
 
-plt.subplots(231), plt.imshow(img, 'gray'), plt.title('original')
-plt.subplots(232), plt.imshow(replicate, 'gray'), plt.title('replicate')
-#plt.subplots(1), plt.imshow(img, 'gray'), plt.title('original')
-#plt.subplots(1), plt.imshow(img, 'gray'), plt.title('original')
-#plt.subplots(1), plt.imshow(img, 'gray'), plt.title('original')
-#plt.subplots(1), plt.imshow(img, 'gray'), plt.title('original')
+plt.subplot(231), plt.imshow(img), plt.title('ORIGINAL')
+plt.subplot(232), plt.imshow(replicate), plt.title('REPLICATE')
+plt.subplot(233), plt.imshow(REFLECT), plt.title('REFLECT')
+plt.subplot(234), plt.imshow(REFLECT_101), plt.title('REFLECT_101')
+plt.subplot(235), plt.imshow(WRAP), plt.title('WRAP')
+plt.subplot(236), plt.imshow(CONST), plt.title('CONST')
 plt.show()
 
 #3 ROI
