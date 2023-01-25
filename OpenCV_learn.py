@@ -22,19 +22,6 @@ def img_color(img, color = 'o'):
 
 img = cv2.imread("cat.jpg")
 
-mit 9038ea584b434434cc2558ed802e7243d5596c00
-Author: Ahalikai <974260393@qq.com>
-Date:   Wed Jan 25 21:59:58 2023 +0800
-
-    2023_01_25 OpenCV_start
-
-commit 4d2007950bfc8fefa28b2274d05d13cfe4c35ab6
-Author: Ahalikai <974260393@qq.com>
-Date:   Wed Jan 25 21:14:35 2023 +0800
-
-    2023_01_25 OpenCV_start
-
-commit b7f4294aed5c101b3d26f3f26ead2193d541327c (origin/master)
 
 #4 filling
 top_size, bottom_size, left_size, right_size = (50, 50, 50, 50)
