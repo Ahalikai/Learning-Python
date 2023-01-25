@@ -22,7 +22,7 @@ def img_color(img, color = 'o'):
 
 img = cv2.imread("cat.jpg")
 
-
+input()
 #4 filling
 top_size, bottom_size, left_size, right_size = (50, 50, 50, 50)
 
