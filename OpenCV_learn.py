@@ -23,7 +23,7 @@ def img_color(img, color = 'o'):
 img = cv2.imread("cat.jpg")
 img_1 = cv2.imread('1_1.jpg')
 
-input()
+#input()
 
 #5 image compute
 img_1 = cv2.resize(img_1, (img.shape[0], img.shape[1]))
