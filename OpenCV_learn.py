@@ -23,9 +23,70 @@ def img_color(img, color = 'o'):
 img = cv2.imread("cat.jpg")
 img_1 = cv2.imread('1_1.jpg')
 
-#input()
+img = cv2.resize(img, (0, 0), fx = 0.5, fy = 0.5)
 
-#5 image compute
+
+
+
+### Section 5
+#3-1 & 3-2 slide  blur guess mid
+
+input()
+### Section 4
+kernal = np.ones((10,10), np.uint8)
+
+dige_erosion = cv2.erode(img, kernal, iterations = 1)
+dige_dilate = cv2.dilate(dige_erosion, kernal, iterations = 1)
+
+opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernal)
+closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernal)
+
+gradient = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernal)
+
+tophat = cv2.morphologyEx(img, cv2.MORPH_TOPHAT, kernal)
+blackhat = cv2.morphologyEx(img, cv2.MORPH_BLACKHAT, kernal)
+
+res1 = np.hstack((dige_erosion, dige_dilate, opening, closing))
+res2 = np.hstack((gradient, tophat, blackhat, img))
+res = np.vstack((res1, res2))
+cv_show('total', res)
+
+### Section 3
+
+#3-1 & 3-2 slide  blur guess mid
+cv_show('Org', img)
+
+blur = cv2.blur(img, (3, 3))
+aussian = cv2.GaussianBlur(img, (5, 5), 1)
+mid = cv2.medianBlur(img, 5)
+
+res = np.hstack((blur, aussian, mid))
+cv_show('total', res)
+
+#cv_show('blur', blur)
+
+#3-0 limit
+
+img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#cv_show('img_gray', img_gray)
+ret, thresh1 = cv2.threshold(img_gray, 127, 255, cv2.THRESH_BINARY)
+ret, thresh2 = cv2.threshold(img_gray, 127, 255, cv2.THRESH_BINARY_INV)
+ret, thresh3 = cv2.threshold(img_gray, 127, 255, cv2.THRESH_TRUNC)
+ret, thresh4 = cv2.threshold(img_gray, 127, 255, cv2.THRESH_TOZERO)
+ret, thresh5 = cv2.threshold(img_gray, 127, 255, cv2.THRESH_TOZERO_INV)
+
+titles = ['Org', 'BINARY', 'BINARY_INV', 'TRUNC', 'TOZERO', 'TOZERO_INV']
+images = [img_gray, thresh1, thresh2, thresh3, thresh4, thresh5]
+
+for i in range(6):
+    plt.subplot(3, 2, i + 1), plt.imshow(images[i], 'gray')
+    plt.title(titles[i])
+    plt.xticks([]), plt.yticks([])
+plt.show()
+
+### Section 2
+
+#2-5 image compute
 img_1 = cv2.resize(img_1, (img.shape[0], img.shape[1]))
 #cv_show('1_1', img_1)
 img_u = cv2.addWeighted(img, 0.6, img_1, 0.4, 0)
@@ -37,7 +98,7 @@ img = img[:5, :5, 0]
 print(img)
 print(img + 10)
 
-#4 filling
+#2-4 filling
 top_size, bottom_size, left_size, right_size = (50, 50, 50, 50)
 
 # REPLICATE： 复制最边缘上的一个点，所有的维度都使用当前的点
@@ -56,7 +117,7 @@ plt.subplot(235), plt.imshow(WRAP), plt.title('WRAP')
 plt.subplot(236), plt.imshow(CONST), plt.title('CONST')
 plt.show()
 
-#3 ROI
+#2-3 ROI
 b, g, r = cv2.split(img)
 print(b.shape)
 
@@ -65,7 +126,7 @@ img = img[0:200, 0:200]
 
 cv_show('img_red', img_color(img, 'G'))
 
-#2 video
+#2-2 video
 vc = cv2.VideoCapture('1.mp4')
 
 if vc.isOpened():
@@ -86,13 +147,11 @@ while open_vc:
 vc.release()
 cv2.destroyAllWindows()
 
-#1 img
+#2-1 img
 print(img.shape)
 
 img = cv2.imread("1_1.jpg", cv2.IMREAD_GRAYSCALE)
 
 cv_show('1_1.jpg', img)
 cv2.imwrite('1_gray.png', img)
-
-
 
