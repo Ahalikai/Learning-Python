@@ -25,8 +25,11 @@ img = cv2.imread('1_1.jpg')
 
 #img = cv2.resize(img, (0, 0), fx = 0.3, fy = 0.3)
 
-### Section 7
+### Section 8
+#8-1
+input()
 
+### Section 7
 #7-5 & 7-7 Contours
 draw_img = img.copy()
 draw_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -43,8 +46,6 @@ draw_img = img.copy()
 res = cv2.drawContours(draw_img, [approx], -1, (0, 255, 0), 2)
 
 cv_show('Contours', res)
-input()
-
 
 #7-6 template
 template = img[200:350, 50:200, :]
