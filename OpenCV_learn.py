@@ -23,13 +23,70 @@ def img_color(img, color = 'o'):
 img_1 = cv2.imread("cat.jpg")
 img = cv2.imread('1_1.jpg')
 
-img = cv2.resize(img, (0, 0), fx = 0.3, fy = 0.3)
-
-
+#img = cv2.resize(img, (0, 0), fx = 0.3, fy = 0.3)
 
 ### Section 7
 
+#7-5 & 7-7 Contours
+draw_img = img.copy()
+draw_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+ret, thresh = cv2.threshold(draw_img, 127, 255, cv2.THRESH_BINARY)
+contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+
+
+cnt = contours[120]
+
+epsilon = 0.1 * cv2.arcLength(cnt, True)
+approx = cv2.approxPolyDP(cnt, epsilon, True)
+
+draw_img = img.copy()
+res = cv2.drawContours(draw_img, [approx], -1, (0, 255, 0), 2)
+
+cv_show('Contours', res)
 input()
+
+
+#7-6 template
+template = img[200:350, 50:200, :]
+w, h, _ = template.shape
+cv_show('small', template)
+methods = ['cv2.TM_CCOEFF', 'cv2.TM_CCOEFF_NORMED', 'cv2.TM_CCORR',
+                'cv2.TM_CCORR_NORMED', 'cv2.TM_SQDIFF', 'cv2.TM_SQDIFF_NORMED']
+
+for meth in methods:
+    img2 = img.copy()
+    method = eval(meth)
+    res = cv2.matchTemplate(img, template, method)
+    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+
+    if method in ['cv2.TM_SQDIFF', 'cv2.TM_SQDIFF_NORMED']:
+        top_left = min_loc
+    else:
+        top_left = max_loc
+    bottom_right = (top_left[0] + w, top_left[1] + h)
+
+    cv2.rectangle(img2, top_left, bottom_right, 255, 2)
+
+    plt.subplot(121), plt.imshow(res, cmap='gray')
+    plt.xticks([]), plt.yticks([])
+    plt.subplot(122), plt.imshow(img2, cmap='gray')
+    plt.xticks([]), plt.yticks([])
+    plt.suptitle(meth)
+    plt.show()
+
+#7-4
+#拉普拉斯金字塔
+img_l = cv2.pyrDown(img)
+img_l = cv2.pyrUp(img_l)
+img_l = img - img_l
+cv_show('lap', img_l)
+
+#高斯金字塔
+img_up = cv2.pyrUp(img)
+cv_show('up', img_up)
+img_down = cv2.pyrDown(img)
+cv_show('down', img_down)
+
 ### Section 6
 '''
 S1 除噪
