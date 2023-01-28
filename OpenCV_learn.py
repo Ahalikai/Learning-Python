@@ -20,18 +20,55 @@ def img_color(img, color = 'o'):
             cur_img[:, :, i]= 0
     return cur_img
 
-img = cv2.imread("cat.jpg")
-img_1 = cv2.imread('1_1.jpg')
+img_1 = cv2.imread("cat.jpg")
+img = cv2.imread('1_1.jpg')
 
-img = cv2.resize(img, (0, 0), fx = 0.5, fy = 0.5)
-
-
+img = cv2.resize(img, (0, 0), fx = 0.3, fy = 0.3)
 
 
-### Section 5
-#3-1 & 3-2 slide  blur guess mid
+
+### Section 7
 
 input()
+### Section 6
+'''
+S1 除噪
+S2 算子求梯度
+S3 NMS
+S4 Double-Threshold
+S5 抑制孤立的弱边缘
+'''
+v1 = cv2.Canny(img, 80, 150)
+v2 = cv2.Canny(img, 50, 100)
+result = np.vstack((v1, v2))
+cv_show('result', result)
+
+### Section 5 sobel scharr laplacian
+#sobel
+sobelx = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize = 3)
+sobelx = cv2.convertScaleAbs(sobelx)
+
+sobely = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize = 3)
+sobely = cv2.convertScaleAbs(sobely)
+
+sobel = cv2.addWeighted(sobelx, 0.5, sobely, 0.5, 0)
+
+#scharr
+scharrx = cv2.Scharr(img, cv2.CV_64F, 1, 0)
+scharrx = cv2.convertScaleAbs(scharrx)
+
+scharry = cv2.Scharr(img, cv2.CV_64F, 1, 0)
+scharry = cv2.convertScaleAbs(scharry)
+
+scharr = cv2.addWeighted(scharrx, 0.5, scharry, 0.5, 0)
+
+#laplacian
+laplacian = cv2.Laplacian(img, cv2.CV_64F)
+laplacian = cv2.convertScaleAbs(laplacian)
+
+result = np.vstack((sobel, scharr, laplacian))
+cv_show('result', result)
+
 ### Section 4
 kernal = np.ones((10,10), np.uint8)
 
