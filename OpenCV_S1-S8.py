@@ -21,13 +21,78 @@ def img_color(img, color = 'o'):
     return cur_img
 
 img_1 = cv2.imread("cat.jpg")
-img = cv2.imread('1_1.jpg')
 
-#img = cv2.resize(img, (0, 0), fx = 0.3, fy = 0.3)
+img = cv2.imread('1_1.jpg')
+img = cv2.resize(img, (0, 0), fx = 0.3, fy = 0.3)
+print(img.shape)
+img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+img_float32 = np.float32(img_gray)
 
 ### Section 8
-#8-1
-input()
+#8-4 ~ 8-6
+dft = cv2.dft(img_float32, flags = cv2.DFT_COMPLEX_OUTPUT)
+dft_shift = np.fft.fftshift(dft)
+
+mid_rows = int(img.shape[0] / 2)
+mid_cols = int(img.shape[1] / 2)
+mask = np.zeros((img.shape[0], img.shape[1], 2), np.uint8)
+mask[mid_rows - 30 : mid_rows + 30, mid_cols - 30: mid_cols + 30] = 1
+
+#IDFT
+fshift = dft_shift * mask
+f_ishift = np.fft.fftshift(fshift)
+img_back = cv2.idft(f_ishift)
+img_back = cv2.magnitude(img_back[:,:,0],(img_back)[:,:,1])
+
+#magnitude_spe =  20 * np.log(cv2.magnitude(dft_shift[:,:,0], (dft_shift)[:,:,1]))
+magnitude_spe=20*np.log(cv2.magnitude(dft_shift[:,:,0],(dft_shift)[:,:,1]))
+
+plt.subplot(311), plt.imshow(img_gray, cmap='gray')
+plt.title('Org gray'), plt.xticks([]), plt.yticks([])
+plt.subplot(312), plt.imshow(magnitude_spe, cmap='gray')
+plt.title('magnitude'), plt.xticks([]), plt.yticks([])
+plt.subplot(313), plt.imshow(img_back, cmap='gray')
+plt.title('idft'), plt.xticks([]), plt.yticks([])
+plt.show()
+
+#8-3
+equ = cv2.equalizeHist(img_gray)
+clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+img_clahe = clahe.apply(img_gray)
+
+res = np.vstack((img_gray, equ, img_clahe))
+cv_show('result', res)
+
+plt.hist(img_gray.ravel(), 256, color='b')
+plt.hist(equ.ravel(), 256, color='r')
+plt.xlim([0, 256])
+plt.show()
+
+#8-1 & 8-2
+color = ['b', 'g', 'r']
+for i, col in enumerate(color):
+    histr = cv2.calcHist([img], [i], None, [256], [0, 256])
+    plt.plot(histr, color = col)
+    plt.xlim([0, 256])
+plt.show()
+
+hist = cv2.calcHist([img_gray], [0], None, [256], [0, 256])
+
+plt.hist(img_gray.ravel(), 256)
+plt.show()
+
+#mask
+mask = np.zeros(img.shape[:2], np.uint8)
+mask[100 : img.shape[0] - 100, 100 : img.shape[1] - 100] = 255
+#cv_show('mask', mask)
+masked_img = cv2.bitwise_and(img, img, mask = mask)
+#cv_show('masked', masked_img)
+hist_mask = cv2.calcHist([img], [0], mask, [256], [0, 256])
+hist = cv2.calcHist([img], [0], None, [256], [0, 256])
+
+plt.subplot(221), plt.plot(hist_mask), plt.plot(hist)
+plt.xlim([0, 256])
+plt.show()
 
 ### Section 7
 #7-5 & 7-7 Contours
@@ -35,7 +100,6 @@ draw_img = img.copy()
 draw_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 ret, thresh = cv2.threshold(draw_img, 127, 255, cv2.THRESH_BINARY)
 contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-
 
 cnt = contours[120]
 
