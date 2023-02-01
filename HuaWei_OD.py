@@ -22,40 +22,6 @@ import numpy as np
 a = [[1, 2], [2, 7]]
 b = [[2, 3], [4, 5]]
 
-# 更优解
-a_i = 0
-b_i = 0
-result = []
-
-def res_append(num, len):
-    if result == [] :
-        result.append([int(num), len])
-    elif(result[-1][0] == int(num)):
-        result[-1][1] = result[-1][1] + len
-
-
-len_now = a[a_i][1]
-while a_i < len(a) and b_i < len(b):
-    if(len_now > 0):
-        len_now = len_now - b[b_i][1]
-        if(len_now > 0):
-            res_append(a[a_i][0] * b[b_i][0], b[b_i][1])
-            b_i = b_i + 1
-    else:
-        print(len_now)
-        if (a_i < len(a)):
-            len_now = len_now + a[a_i][1]
-            a_i = a_i + 1
-        if(len_now < 0):
-            res_append(a[a_i][0] * b[b_i][0], len_now + b[b_i][1])
-
-
-        if (len_now == 0):
-            b_i = b_i + 1
-if len_now != 0:
-    result.append([int(0), abs(len_now)])
-print(result)
-
 
 
 '''
