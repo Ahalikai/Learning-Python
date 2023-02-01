@@ -134,23 +134,3 @@ for (i, (gx, gy, gw, gh)) in enumerate(locs):
 print("Credit Card Type: {}".format(FRIST_NUMBER[output[0]]))
 print("Credit Card #: {}".format("".join(output)))
 cv_show("Image", image)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
