@@ -18,53 +18,37 @@ a*b = [2, 2, 4, 8, 8, 8, 8, 8, 0]   压缩后为 [[2, 2], [4, 1], [8, 5], [0, 1]
 压缩列表b = [[2, 20000000], [3, 88888888], [2, 19999999], [1, 100000000]]
 求 a*b 的压缩列表
 '''
+# 暴力解
+import numpy as np
 
-a = [[1, 9000000], [2, 88888888], [3, 99999999], [4, 800000000]]
-b = [[2, 20000000], [3, 88888888], [2, 19999999], [1, 100000000]]
-
-a_n = len(a)
-b_n = len(b)
-
+a = [[1, 2], [2, 7]]
+b = [[2, 3], [4, 5]]
 a_org = []
 b_org = []
+res_org = []
+for i in a:
+    for j in range(i[1]):
+        a_org.append(i[0])
+for i in b:
+    for j in range(i[1]):
+        b_org.append(i[0])
 
-for i in range(a_n):
-    for j in range(a[i][0]):
-        a_org.append(a[i][1])
+max_len = max(len(a_org), len(b_org))
+min_len = min(len(a_org), len(b_org))
 
-for i in range(b_n):
-    for j in range(b[i][0]):
-        b_org.append(b[i][1])
+res_org = np.zeros(max_len)
+for i in range(min_len):
+    res_org[i] = a_org[i] * b_org[i]
 
-a_org_len = len()
-
-
-#c_org = a_org*b_org
-c_org = []
-
-
-c_len = len(c_org)
-c = []
-i = 0
-j = 0
-#c =a*b = [2, 2, 4, 8, 8, 8, 8, 8, 0]
-[2, 2] [4, 1] [8, 1] [0, 1]
-while i < c_len:
-    if (j == 0) :  #初始化
-        t = c_org[i]
-        j = 1
-    else :
-        if(c_org[i] == t):  #若连续 相同， j+=1
-            j += 1
-        else:  #若不连续时，则将之前数据加入c中，且更新t、j
-            c_pop = []
-            c_pop.append(t)
-            c_pop.append(j)
-            c.append(c_pop)
-            t = c_org[i]
-            j = 1
-    i += 1
-
-print(c)
-
-
+result = []
+num, totol = res_org[0], 1
+for i in range(1, len(res_org)):
+    if res_org[i] == num:
+        totol = totol + 1
+    else:
+        result.append([int(num), totol])
+        num = res_org[i]
+        totol = 1
+result.append([int(num), totol])
+#print(res_org)
+print(result)
