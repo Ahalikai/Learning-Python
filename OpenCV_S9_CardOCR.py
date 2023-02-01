@@ -109,7 +109,7 @@ for (i, (gx, gy, gw, gh)) in enumerate(locs):
         (x, y, w, h) = cv2.boundingRect(c)
         roi = group[y : y + h, x : x + w]
         roi = cv2.resize(roi, (57, 88))
-        #cv_show('roi', roi)
+        cv_show('roi', roi)
 
         scores = []
 
@@ -120,6 +120,7 @@ for (i, (gx, gy, gw, gh)) in enumerate(locs):
             scores.append(score)
 
         groupOutput.append(str(np.argmax(scores)))
+
 
     # 画出结果
     cv2.rectangle(image, (gx - 5, gy - 5),
