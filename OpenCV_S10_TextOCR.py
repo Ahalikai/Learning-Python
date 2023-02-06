@@ -1,6 +1,12 @@
+# import
+from PIL import Image
 import numpy as np
 import argparse
 import cv2
+import os
+import pytesseract
+
+
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", default="images/page.jpg", required=False, help="input a image")
@@ -106,5 +112,12 @@ warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
 ref = cv2.threshold(warped, 100, 255, cv2.THRESH_BINARY)[1]
 print("Step3: 透视变换")
 cv2.imshow("Result", resize(ref, height=650))
+
+# text
+print("Step4: 文本检测")
+
+text = pytesseract.image_to_string(ref)
+print(text)
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()
