@@ -6,8 +6,6 @@ import cv2
 import os
 import pytesseract
 
-
-
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", default="images/page.jpg", required=False, help="input a image")
 args = vars(ap.parse_args())
