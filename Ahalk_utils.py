@@ -14,7 +14,7 @@ def sort_contours(cnts, method='L2R'):
                                        key=lambda b: b[1][i], reverse=reverse))
 
     return cnts, boundingBoxs
-F
+
 def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
     dim = None
     (h, w) = image.shape[:2]
