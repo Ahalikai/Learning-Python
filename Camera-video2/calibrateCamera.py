@@ -65,7 +65,6 @@ print("tvecs平移（向量）外参:\n",tvecs  )  # 平移向量  # 外参数
 newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (u, v), 0, (u, v))
 print('newcameramtx外参',newcameramtx)
 
-
 #打开摄像机
 camera=cv2.VideoCapture(0)
 while True:
