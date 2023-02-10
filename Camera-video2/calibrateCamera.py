@@ -21,7 +21,7 @@ objp = objp*18.1  # 18.1 mm
 objpoints = [] # 在世界坐标系中的三维点
 imgpoints = [] # 在图像平面的二维点
 #加载pic文件夹下所有的jpg图像
-images = glob.glob('./*.jpg')  #   拍摄的十几张棋盘图片所在目录
+images = glob.glob('1448camera/*.jpg')  #   拍摄的十几张棋盘图片所在目录
 
 i=0
 for fname in images:
@@ -48,7 +48,7 @@ for fname in images:
         cv2.namedWindow('findCorners', cv2.WINDOW_NORMAL)
         cv2.resizeWindow('findCorners', 640, 480)
         cv2.imshow('findCorners',img)
-        cv2.waitKey(200)
+        cv2.waitKey(0)
 cv2.destroyAllWindows()
 #%% 标定
 print('正在计算')
