@@ -1,4 +1,5 @@
 
+# 参考资料 https://zhuanlan.zhihu.com/p/606488403
 
 def regpt():
     import openai
