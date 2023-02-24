@@ -55,7 +55,7 @@ def visualize_facial_landmarks(image, shape, colors = None, alpha = 0.75):
 			(168, 100, 168), (158, 163, 32),
 			(163, 38, 32), (180, 42, 220)]
 
-	# fro part
+	# for part
 	for(i, name) in enumerate(FACIAL_LANDMARKS_68_IDXS.keys()):
 		# get every point
 		(j, k) = FACIAL_LANDMARKS_68_IDXS[name]
@@ -112,6 +112,7 @@ for (i, rect) in enumerate(rects):
 		cv2.imshow("roi", roi)
 		cv2.imshow("image", image)
 		cv2.waitKey(0)
+
 
 	output = visualize_facial_landmarks(image, shape)
 	cv2.imshow("image", output)
