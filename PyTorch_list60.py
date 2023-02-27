@@ -2,7 +2,14 @@
 
 # 60题PyTorch简易入门
 # https://zhuanlan.zhihu.com/p/102492108
+# LeNet5
 
+
+
+
+
+
+'''
 import torch
 import numpy as np
 
@@ -80,3 +87,5 @@ print(x.size(), y.size())
 x = torch.randn(1)
 print(x)
 print(x.item())
+
+'''
