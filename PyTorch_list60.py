@@ -6,7 +6,64 @@
 
 
 
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
 
+class Net(nn.Module):
+    def __init__(self):
+        super(Net, self).__init__()
+        # image 32 * 32 * 3, conv 5 * 5 * 6
+        self.conv1 = nn.Conv2d(3, 6, 5)
+        # in_clannel 3, out 16
+        self.conv2 = nn.Conv2d(6, 16, 5)
+        # in 16 * 5 * 5
+        self.fc1 = nn.Linear(16 * 5 * 5, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 10)
+
+    def forward(self, x):
+        # conv1 + relu + max_pool
+        x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
+        # conv2 + relu + max_pool
+        x = F.max_pool2d(F.relu(self.conv2(x)), (2, 2))
+        # x -> 列向量
+        x = x.view(-1, 16 *  5 * 5)
+        # fc1 + relu ...
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
+
+        return x
+
+net = Net()
+print(net)
+
+params = list(net.parameters())
+print(len(params))
+
+for i in range(len(params)):
+    print(params[i].size())
+
+in_rand = torch.randn(1, 3, 32, 32)
+
+criterion = nn.MSELoss()
+tatget = torch.randn(10).view(1, -1)
+
+
+net.zero_grad()
+
+print('conv1.bias.grad before backward')
+print(net.conv1.bias.grad)
+
+optimizer = optim.SGD(net.parameters(), lr=0.01)
+optimizer.zero_grad()
+out = net(in_rand)
+
+loss = criterion(tatget, out)
+optimizer.step()
+print(loss)
 
 
 '''
