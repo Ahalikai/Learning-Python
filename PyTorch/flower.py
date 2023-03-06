@@ -17,6 +17,7 @@ import copy
 import json
 from PIL import Image
 
+
 data_dir = './flower_data/'
 train_dir = data_dir + '/train'
 test_dir = data_dir + '/valid'
