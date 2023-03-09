@@ -74,6 +74,7 @@ data_transforms = {
     ]),
 }
 
+
 train_dataset = Dataset_flower(root_dir='./flower_data/', ann_file='flower_data/train.txt', transform=data_transforms['train'])
 print(len(train_dataset))
 train_loader = DataLoader(train_dataset, batch_size=2, shuffle=True)
