@@ -1,0 +1,6 @@
+train/1/image_06734.jpg 1
+train/1/image_06735.jpg 1
+train/1/image_06736.jpg 1
+train/1/image_06737.jpg 1
+train/1/image_06738.jpg 1
+train/1/image_06740.jpg 1
