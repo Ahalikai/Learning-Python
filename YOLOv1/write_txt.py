@@ -67,6 +67,7 @@ def write_sets(lists, set):
         set.write('\n')
     set.close()
 
+
 def write_txt(Annotations):
     xml_files = os.listdir(Annotations)
     random.shuffle(xml_files)  # random xml files
