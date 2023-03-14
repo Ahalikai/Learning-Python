@@ -43,7 +43,7 @@ def write_sets(lists, set):
     count = 0
     for train_list in lists:
         count += 1
-        image_name = train_list.split('.')[0] + 'jpg'
+        image_name = train_list.split('.')[0] + '.jpg'
         results = parse_rec(Annotations + train_list)
         if len(results) == 0:
             print(train_list)
