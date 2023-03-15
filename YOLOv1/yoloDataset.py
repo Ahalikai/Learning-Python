@@ -87,7 +87,13 @@ class yoloDataset(Dataset):
         boxes = self.boxes[item].clone()
         labels = self.labels[item].clone()
         if self.train:
-            pass
+            img, boxes = self.random_filp(img, boxes)
+            img, boxes = self.randomScale(img, boxes)
+            img = self.randomBlur(img)
+            img = self.RandomBrightness(img)
+
+            #img, boxes, labels = self.randomShift(img, boxes, labels)
+
         h, w, _ = img.shape
         boxes /= torch.Tensor([w, h, w, h]).expand_as(boxes) # 归一化
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # pytorch pretrained use RGB
@@ -109,7 +115,46 @@ class yoloDataset(Dataset):
         bgr = bgr - mean
         return bgr
 
+    def random_filp(self, img, boxes):
+        if random.random() < 0.5:
+            im_lr = np.fliplr(img).copy()
+            h, w, _ = img.shape
+            xmin = w - boxes[:, 2]
+            xmax = w - boxes[:, 0]
+            boxes[:, 0] = xmin
+            boxes[:, 2] = xmax
+            return im_lr, boxes
+        return img, boxes
 
+    def randomScale(self, img, boxes):
+        # width = 0.8 ~ 1.2
+        if random.random() < 0.5:
+            scale = random.uniform(0.8, 1.2)
+            h, w, c = img.shape
+            img = cv2.resize(img, (int(w * scale), h))
+            scale_tensor = torch.FloatTensor(
+                [[scale, 1, scale, 1]]).expand_as(boxes)
+            boxes = boxes * scale_tensor
+        return img, boxes
+
+    def randomBlur(self, img):
+        if random.random() < 0.5:
+            img = cv2.blur(img, (5, 5))
+        return img
+
+    def RandomBrightness(self, img):
+        if random.random() < 0.5:
+            hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+            h, s, v = cv2.split(hsv)
+            adjust = random.choice([0.5, 1.5])
+            v = v * adjust
+            v = np.clip(v, 0, 255).astype(hsv.dtype)
+            hsv = cv2.merge((h, s, v))
+            img = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+        return img
+
+    def randomShift(self, img, boxex, labels):
+        pass
 
 
 def main():
