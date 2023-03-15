@@ -51,6 +51,36 @@ class yoloDataset(Dataset):
 
         self.num_samples = len(self.boxes)
 
+
+    def encoder(self, boxes, labels): # input_boxes (x1, y1, x2, y2), output is ground truth (7*7*30)
+        target = torch.zeros((self.S, self.S, int(CLASS_NUM + self.B * 5))) # 7*7*30
+        cell_size = 1. / self.S # 1/7
+
+        wh = boxes[:, 2:] - boxes[:, :2] # wh = [w, h] 1*1
+        cxcy = (boxes[:, 2:] + boxes[:, :2]) / 2 # 归一化center of boxes
+
+        for i in range(cxcy.size()[0]):
+            cxcy_sample = cxcy[i]
+            ij = (cxcy_sample / cell_size).ceil() - 1 # left-top角 (7*7)
+
+            target[int(ij[1]), int(ij[0]), 4] = 1 # first box's confidence
+            target[int(ij[1]), int(ij[0]), 9] = 1 # second box's confidence
+            target[int(ij[1]), int(ij[0]), int(labels[i]) + self.B * 5] = 1 # 20 classes's confidence
+
+            xy = ij * cell_size # 归一化left-top角 （1*1）
+
+            delta_xy = (cxcy_sample - xy) / cell_size # center - left-top （7*7）
+
+            # w, h is box's width & hight for image's w&h proportion
+            target[int(ij[1]), int(ij[0]), 2:4] = wh[i] # w1, h1
+            target[int(ij[1]), int(ij[0]), :2] = delta_xy # x1, y1
+
+            target[int(ij[1]), int(ij[0]), 7:9] = wh[i]  # w2, h2
+            target[int(ij[1]), int(ij[0]), 5:7] = delta_xy  # x2, y2
+
+        return target #(xc, yc) = 7*7 (w, h) = 1*1
+
+
     def __getitem__(self, item):
         fname = self.fnames[item]
         img = cv2.imread(os.path.join(self.root + fname))
@@ -69,11 +99,6 @@ class yoloDataset(Dataset):
             img = t(img)
 
         return img, target
-
-    def encoder(self, boxes, labels):
-        pass
-
-
 
 
     def __len__(self):
