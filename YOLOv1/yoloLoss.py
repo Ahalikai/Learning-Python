@@ -8,6 +8,7 @@ import warnings
 warnings.filterwarnings('ignore') # ignore warning
 CLASS_NUM = 4
 
+
 class yoloLoss(nn.Module):
     def __init__(self, S, B, l_coord, l_noobj):
         # l_coord = 5, l_noobj = 0.5
