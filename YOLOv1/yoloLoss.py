@@ -78,6 +78,37 @@ class yoloLoss(nn.Module):
         noo_pred_mask[:, 9] = 1
         noo_pred_c = noo_pred[noo_pred_mask] # noo_pred只计算c的损失size[-1, 2]
         noo_target_c = noo_target[noo_pred_mask]
+        nooobj_loss = F.mse_loss(noo_pred_c, noo_target_c, size_average=False) # 均分误差
+
+        #compute contain obj loss
+        coo_response_mask = torch.cuda.ByteTensor(box_target.size()).bool() # ByteTensor 构建Byte类型的tensor，元素全为0
+        coo_response_mask.zero_() # 全部置为False
+
+        no_coo_response_mask = torch.cuda.ByteTensor(box_target.size()).bool()  # ByteTensor 构建Byte类型的tensor，元素全为0
+        no_coo_response_mask.zero_()  # 全部置为False
+
+        box_target_iou = torch.zeros(box_target.size()).cuda()
+
+        #box1 = 预测 box2 = ground true
+        for i in range(0, box_target.size()[0], 2): #box_target.size()[0]
+            box1 = box_pred[i:i + 2] # 第一个grid ceil对应2个bbox
+            box1_xyxy = Variable(torch.FloatTensor(box1.size()))
+            box1_xyxy[:, :2] = box1[:, :2] / float(self.S) - 0.5 * box1[:, 2:4] # 原本的（xc, yc) 7*7,所以处以7
+            box1_xyxy[:, 2:4] = box1[:, :2] / float(self.S) + 0.5 * box1[:, 2:4]
+            box2 = box_target[i].view(-1, 5)
+            box2_xyxy = Variable(torch.FloatTensor(box2.size()))
+            box2_xyxy[:, :2] = box2[:, :2] / float(self.S) - 0.5 * box2[:, 2:4]
+            box2_xyxy[:, 2:4] = box2[:, :2] / float(self.S) + 0.5 * box2[:, 2:4]
+            iou = self.compute_iou(box1_xyxy[:, :4], box2_xyxy[:, :4])
+            max_iou, max_index = iou.max(0)
+            max_index = max_index.data.cuda()
+            coo_response_mask[i + max_index] = 1 #IOU最大的bbox
+            no_coo_response_mask[i + 1 -max_index] = 1 #舍去的bbox
+            # confidence scoce = predicted box 与 the ground truth 的 IOU
+            box_target_iou[i + max_index, torch.LongTensor([4]).cuda()] = max_iou.data.cuda()
+
+
+
 
 
 
