@@ -107,6 +107,34 @@ class yoloLoss(nn.Module):
             # confidence scoce = predicted box 与 the ground truth 的 IOU
             box_target_iou[i + max_index, torch.LongTensor([4]).cuda()] = max_iou.data.cuda()
 
+        box_target_iou = Variable(box_target_iou).cuda()
+        box_pred_response = box_pred[coo_response_mask].view(-1, 5)
+        box_target_response_iou = box_target_iou[coo_response_mask].view(-1, 5)
+
+        # litte IOU
+        no_box_pred_response = box_pred[no_coo_response_mask].view(-1, 5)
+        no_box_target_response_iou = box_target_response_iou[no_coo_response_mask].view(-1, 5)
+        no_box_target_response_iou[:, 4] = 0
+
+        box_target_response = box_target[coo_response_mask].view(-1, 5)
+
+        # grid ceil's IOU 较大的bbox置信度损失
+        contain_loss = F.mse_loss(box_target_response[:, 4], box_target_response_iou[:, 4], size_average=False)
+        # grid ceil's IOU中舍去bbox损失
+        no_contain_loss = F.mse_loss(no_box_pred_response[:, 4], no_box_target_response_iou[:, 4], size_average=False)
+
+        #bbox坐标损失
+        loc_loss = F.mse_loss(box_pred_response[:, :2], box_target_response[:, :2], size_average=False) + F.mse_loss(
+            torch.sqrt(box_target_response[:, 2:4]), torch.sqrt(box_target_response[:, 2:4]), size_average=False
+        )
+
+        #class loss
+        class_loss = F.mse_loss(class_pred, class_target, size_average=False)
+
+        return (self.l_coord * loc_loss + contain_loss + self.l_noobj * (nooobj_loss + no_contain_loss) + class_loss) / N
+
+
+
 
 
 
