@@ -1,3 +1,6 @@
+
+# link: https://blog.csdn.net/ing100/article/details/125155065
+
 import torch
 from torch.nn import Sequential, Conv2d, MaxPool2d, ReLU, BatchNorm2d
 from torch import nn
