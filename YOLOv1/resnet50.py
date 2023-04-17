@@ -71,7 +71,83 @@ class output_net(nn.Module):
         out += self.downsample(x)
         out = self.relu(out)
         return out
+class ResNet50(nn.Module):
+    def __init__(self, block):
+        super(ResNet50, self).__init__()
+        self.block = block
+        self.layer0 = Sequential(
+            Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False),
+            BatchNorm2d(64),
+            ReLU(inplace=True),
+            MaxPool2d(kernel_size=3, stride=2, padding=1)
+        )
+        self.layer1 = self.make_layer(self.block, channel=[64, 64], stride1=[1, 1, 1], stride2=[1, 1, 1], n_re=3)
+        self.layer2 = self.make_layer(self.block, channel=[256, 128], stride1=[2, 1, 1], stride2=[1, 1, 1], n_re=4)
+        self.layer3 = self.make_layer(self.block, channel=[512, 256], stride1=[2, 1, 1], stride2=[1, 1, 1], n_re=6)
+        self.layer4 = self.make_layer(self.block, channel=[1024, 512], stride1=[2, 1, 1], stride2=[1, 1, 1], n_re=3)
+        self.layer5 = self._make_output_layer(in_channels=2048)
+        self.avgpool = nn.AvgPool2d(2)
+        self.conv_end = nn.Conv2d(256, int(CLASS_NUM + 10), kernel_size=3, stride=1, padding=1, bias=False)
+        self.bn_end = nn.BatchNorm2d(int(CLASS_NUM + 10))
 
+    def make_layer(self, block, channel, stride1, stride2, n_re):
+        layers = []
+        for num_layer in range(0, n_re):
+            if num_layer == 0:
+                layers.append(block(channel[0], channel[1], stride1, downsample=True))
+            else:
+                layers.append(block(channel[1]*4, channel[1], stride2, downsample=False))
+        return Sequential(*layers)
+
+    def _make_output_layer(self, in_channels):
+        layers = []
+        layers.append(
+            output_net(
+                in_planes=in_channels,
+                planes=256,
+                block_type='B'
+            )
+        )
+        layers.append(
+            output_net(
+                in_planes=256,
+                planes=256,
+                block_type='A'
+            )
+        )
+        layers.append(
+            output_net(
+                in_planes=256,
+                planes=256,
+                block_type='A'
+            )
+        )
+        return nn.Sequential(*layers)
+
+    def forward(self, x): # x = 3*448*448
+        out = self.layer0(x) # 64*112*112
+        out = self.layer1(out) # 256*112*112
+        out = self.layer2(out) # 512*56*56
+        out = self.layer3(out) # 1024*28*28
+        out = self.layer4(out) # 2048*14*14
+        out = self.layer5(out) # batch_size*256*14*14
+        out = self.avgpool(out) # batch_szie*256*7*7
+        out = self.conv_end(out) # batch_size*30*7*7
+        out = self.bn_end(out)
+        out = torch.sigmoid(out)
+        out = out.permute(0, 2, 3, 1) # batch_size*7*7*30
+        return out
+
+def resnet50(pretrained=False):
+    model = ResNet50(Bottleneck)
+    if pretrained:
+        model.load_state_dict(model_zoo.load_url(model_urls['resnet50']))
+    return model
+
+if __name__=='__main__':
+    model = resnet50()
+    for i in model.state_dict().keys():
+        print(i)
 
 
 
