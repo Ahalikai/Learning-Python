@@ -6,7 +6,7 @@ import os
 import random
 
 VOC_CLASSES = ( # Yours classes
-    'cscn', 'lkbn', 'tkbe'
+    'cscn', 'lkbn', 'tkbe', 'person'
 )
 
 # parameter
@@ -80,5 +80,6 @@ def write_txt(Annotations):
 
 
 if __name__ == "__main__":
-    Annotations = 'D:\pycharm\yolov5-7.0\cscn/2021/200819cscn-3/Annotations/'
+    #Annotations = 'D:\pycharm\yolov5-7.0\cscn/2021/200819cscn-3/Annotations/'
+    Annotations = 'D:\pycharm\yolov5-7.0\cscn/2021/2023-03-14-all-xml/'
     write_txt(Annotations)

@@ -74,7 +74,7 @@ class yoloLoss(nn.Module):
         # 不包含物体的grid ceil的置信度损失
         noo_pred = pred_tensor[noo_mask].view(-1, int(CLASS_NUM + self.B * 5))
         noo_target = target_tensor[noo_mask].view(-1, int(CLASS_NUM + self.B * 5))
-        noo_pred_mask = torch.cuda.ByteTeneor(noo_pred.size()).bool()
+        noo_pred_mask = torch.cuda.ByteTensor(noo_pred.size()).bool()
         noo_pred_mask.zero_()
         noo_pred_mask[:, 4] = 1
         noo_pred_mask[:, 9] = 1
@@ -115,7 +115,7 @@ class yoloLoss(nn.Module):
 
         # litte IOU
         no_box_pred_response = box_pred[no_coo_response_mask].view(-1, 5)
-        no_box_target_response_iou = box_target_response_iou[no_coo_response_mask].view(-1, 5)
+        no_box_target_response_iou = box_target_iou[no_coo_response_mask].view(-1, 5)
         no_box_target_response_iou[:, 4] = 0
 
         box_target_response = box_target[coo_response_mask].view(-1, 5)
