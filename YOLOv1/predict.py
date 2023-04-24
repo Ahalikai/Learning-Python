@@ -52,7 +52,7 @@ class Pred():
             class_num = bboxes[i][5].item()
             print(x1, x2, y1, y2, VOC_CLASSES[int(class_num)])
 
-            cv2.rectangle(image, (int(x1), int(y1), int(x2), int(y2)), (144, 144, 255))
+            cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), (144, 144, 255))
 
         cv2.imshow('img', image)
         cv2.waitKey(0)
@@ -106,7 +106,6 @@ class Pred():
             if y[0, 4] >= confident:
                 for k in range(0, num):
                     y_score = y[:, 4]
-                    _, y_score_order = y[:, 4]
                     _, y_score_order = y_score.sort(dim=0, descending=True)
                     y = y[y_score_order, :]
                     if y[k, 4] > 0:
@@ -135,7 +134,8 @@ class Pred():
         return bboxes
 
 if __name__ == "__main__":
-    img_root = "D:\pycharm\yolov7-main\cscn/test-images/1-1.jpg"
+    #img_root = "D:\pycharm\yolov7-main\cscn/test-images/1-1.jpg"
+    img_root = "D:/pycharm/yolov5-7.0/mydata/JPG/320_19719604178.jpg"
     Pred = Pred(model, img_root)
     Pred.result()
 

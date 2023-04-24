@@ -30,12 +30,11 @@ class yoloLoss(nn.Module):
             # [M,2] -> [1,M,2] -> [N,M,2]
             box2[:, :2].unsqueeze(0).expand(N, M, 2),
         )
-
         rb = torch.min(  # return torch's min
             # [N,2] -> [N,1,2] -> [N,M,2]
-            box1[:, :2].unsqueeze(1).expand(N, M, 2),
+            box1[:, 2:].unsqueeze(1).expand(N, M, 2),
             # [M,2] -> [1,M,2] -> [N,M,2]
-            box2[:, :2].unsqueeze(0).expand(N, M, 2),
+            box2[:, 2:].unsqueeze(0).expand(N, M, 2),
         )
 
         wh = rb - lt # [N, M, 2]
@@ -121,42 +120,19 @@ class yoloLoss(nn.Module):
         box_target_response = box_target[coo_response_mask].view(-1, 5)
 
         # grid ceil's IOU 较大的bbox置信度损失
-        contain_loss = F.mse_loss(box_target_response[:, 4], box_target_response_iou[:, 4], size_average=False)
+        contain_loss = F.mse_loss(box_pred_response[:, 4], box_target_response_iou[:, 4], size_average=False)
         # grid ceil's IOU中舍去bbox损失
         no_contain_loss = F.mse_loss(no_box_pred_response[:, 4], no_box_target_response_iou[:, 4], size_average=False)
 
         #bbox坐标损失
         loc_loss = F.mse_loss(box_pred_response[:, :2], box_target_response[:, :2], size_average=False) + F.mse_loss(
-            torch.sqrt(box_target_response[:, 2:4]), torch.sqrt(box_target_response[:, 2:4]), size_average=False
+            torch.sqrt(box_pred_response[:, 2:4]), torch.sqrt(box_target_response[:, 2:4]), size_average=False
         )
 
         #class loss
         class_loss = F.mse_loss(class_pred, class_target, size_average=False)
 
         return (self.l_coord * loc_loss + contain_loss + self.l_noobj * (nooobj_loss + no_contain_loss) + class_loss) / N
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

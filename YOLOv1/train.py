@@ -13,7 +13,7 @@ device = 'cuda'
 file_root = 'D:\pycharm\yolov5-7.0\mydata\JPG/'
 batch_size = 6
 learning_rate = 0.001
-num_epochs = 100
+num_epochs = 10
 
 train_dataset = yoloDataset(img_root=file_root, list_file='train.txt', train=True, transform=[transforms.ToTensor()])
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=0)
