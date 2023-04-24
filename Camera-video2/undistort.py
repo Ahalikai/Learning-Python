@@ -31,7 +31,7 @@ def undistort(frame):
 #
 # cap.release()
 
-images = glob.glob('1448camera/*.jpg')  #   拍摄的十几张棋盘图片所在目录
+images = glob.glob('04-23camera/*.jpg')  #   拍摄的十几张棋盘图片所在目录
 for fname in images:
 	print(fname)
 	img = cv.imread(fname)

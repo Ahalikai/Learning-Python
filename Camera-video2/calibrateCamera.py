@@ -22,7 +22,7 @@ objp = objp*18.1  # 18.1 mm
 objpoints = [] # 在世界坐标系中的三维点
 imgpoints = [] # 在图像平面的二维点
 #加载pic文件夹下所有的jpg图像
-images = glob.glob('1448camera/*.jpg')  #   拍摄的十几张棋盘图片所在目录
+images = glob.glob('04-23camera/*.jpg')  #   拍摄的十几张棋盘图片所在目录
 
 i=0
 for fname in images:
