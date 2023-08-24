@@ -8,10 +8,7 @@ options = webdriver.ChromeOptions()
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36")
 # 这个是绝对路径
 
-cookies = [{"name": "_ga_0KD226TRZ5", "value": "GS1.1.1692270661.1.1.1692271979.0.0.0"},
-            {"name": "_ga", "value": "GA1.1.288898560.1691587142"},
-            {"name": "_ga_LE73XPNH8J", "value": "GS1.3.1691587142.1.1.1691587411.0.0.0"}
-           ]
+cookies = [{"name": "", "value": ""}]
 
 driver = webdriver.Chrome(options=options)
 
